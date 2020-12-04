@@ -24,7 +24,7 @@ def _eyr(content):
     try:
         i = int(content)
         return 2020 <= i <= 2030
-    except:
+    except ValueError:
         return False
 
 
@@ -37,7 +37,7 @@ def _hgt(content):
         elif u == "in":
             return 50 <= i <= 76
         return False
-    except:
+    except (ValueError, AttributeError):
         return False
 
 
@@ -48,7 +48,7 @@ def _hcl(content):
     try:
         int(content, 0)
         return True
-    except:
+    except ValueError:
         return False
 
 
@@ -60,7 +60,7 @@ def _pid(content):
     try:
         int(content)
         return len(content) == 9
-    except:
+    except ValueError:
         return False
 
 
@@ -79,9 +79,8 @@ validity_switch = {
 def is_valid_p(p):
     es = {e[0]: e[1] for e in map(lambda x: x.split(":"), p.split())}
     seen_es = set(es.keys())
-    if len(fields - seen_es):
-        return False
-    return all([validity_switch[e](es[e]) for e in es])
+    return (len(fields - seen_es) == 0
+            and all([validity_switch[e](es[e]) for e in es]))
 
 
 with open(util.get_input_path(4), "r") as f:

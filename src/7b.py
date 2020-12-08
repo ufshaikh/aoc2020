@@ -24,11 +24,12 @@ def parse_rule(rule: str) -> None:
 
 
 @func.cache
-def bag_holds(holder):
+def bag_holds(holder: str) -> int:
     if rules[holder] is None:
         return 0
-    return (sum([b[1] * bag_holds(b[0]) for b in rules[holder]])
-            + sum([b[1] for b in rules[holder]]))
+    t = rules[holder]  # mypy needs a temporary here
+    assert t is not None
+    return sum([b[1] * bag_holds(b[0]) for b in t]) + sum([b[1] for b in t])
 
 
 rules: t.Dict[str, t.Optional[t.List[t.Tuple[str, int]]]] = {}

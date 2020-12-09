@@ -11,7 +11,7 @@ c = Counter(inp[:25])
 
 for i in range(25, l):
     elem = inp[i]
-    if not any([((elem-elem_) in c) for elem_ in inp[i-25:i]]):
+    if not any([elem-elem_ in c and elem_ * 2 != elem for elem_ in inp[i-25:i]]):
         print(elem)
         break
     to_remove = inp[i-25]

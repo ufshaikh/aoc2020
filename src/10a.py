@@ -1,20 +1,19 @@
 import util
+
+
+maximum = 0
+length = 0
 with open(util.get_input_path(10), "r") as f:
-    inp = [int(s) for s in f.readlines()]
+    for line in f:
+        jolt = int(line.strip())
+        maximum = max(maximum, jolt)
+        length += 1
 
-inp = sorted(inp)
+# for the device itself
+length += 1
+maximum += 3
 
-one = 0
-three = 0
-prev = 0
-
-for i in inp:
-    diff = i - prev
-    if diff == 1:
-        one += 1
-    if diff == 3:
-        three += 1
-    prev = i
-
-three += 1  # for the device
-print(one * three)
+#  num_of_three_jolts * 3 + num_of_one_jolts = maximum
+#  num_of_three_jolts + num_of_of_one_jolts = length
+three_jolts = (maximum - length) / 2
+print(three_jolts * (length - three_jolts))

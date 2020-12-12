@@ -1,25 +1,29 @@
 import util
-import functools as func
 
-
+jolts = set()
+max_jolt = 0
 with open(util.get_input_path(10), "r") as f:
-    inp = [int(s) for s in f.readlines()]
+    for line in f:
+        jolt = int(line.strip())
+        jolts.add(jolt)
+        max_jolt = max(max_jolt, jolt)
 
-inp = sorted(inp)
-inp.append(inp[-1]+3)
-inp.reverse()
-inp.append(0)
+#  ways to end the sequence at j - idx
+#      -3  -2  -1
+ways = [0, 0, 0]
+ways[-1] = 1
 
 
-length = len(inp)
-@func.cache
-def ways(i):
-    if i == length - 1:
-        return 1
+for j in range(1, max_jolt+1):
     w = 0
-    for s in range(1,4):
-        if (i + s) < length and inp[i] - inp[i + s] <= 3:
-            w += ways(i + s)
-    return w
+    if j in jolts:
+        for diff in range(1, 4, 1):  # possible gaps between jolts
+            if j - diff < 0:
+                break
+            w += ways[-diff]
+    ways[0] = ways[1]
+    ways[1] = ways[2]
+    ways[2] = w
 
-print(ways(0))
+
+print(ways[-1])  #  your device doesn't add more ways
